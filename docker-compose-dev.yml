@@ -2,7 +2,7 @@ version: '3'
 services:
   devDB:
     container_name: truec-dev-db
-    image: postgres:12-alpine
+    image: postgres:11.6-alpine
     ports:
       - '5432:5432'
     environment:
