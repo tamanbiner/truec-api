@@ -13,6 +13,8 @@ async function bootstrap(): Promise<void> {
     AppModule,
     new FastifyAdapter()
   );
+  app.enableCors();
+
   await app.listen(HOST_PORT);
 
   Logger.log(`Listening at port: ${HOST_PORT}`);
