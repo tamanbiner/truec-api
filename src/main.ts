@@ -13,7 +13,10 @@ async function bootstrap(): Promise<void> {
     AppModule,
     new FastifyAdapter()
   );
+
   app.enableCors();
+
+  app.setGlobalPrefix('api');
 
   await app.listen(HOST_PORT);
 
