@@ -5,7 +5,8 @@ module.exports = {
   username: process.env.PGUSER,
   password: process.env.PGPASSWORD,
   database: process.env.PGDATABASE,
-  migrations: ['src/migrations/*.ts'],
+  migrations: ['dist/migrations/*.{ts,js}'],
   cli: { migrationsDir: 'src/migrations' },
-  entities: ['src/**/**.entity.{ts,js}'],
+  entities: ['dist/**/**.entity.{ts,js}'],
+  logging: true,
 };
