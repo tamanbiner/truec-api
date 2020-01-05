@@ -13,6 +13,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { CreateUserDto } from '../user/dto/createUser.dto';
 import { AuthService } from './auth.service';
 import { ValidationPipe } from '../shared/pipes/validation.pipe';
+import { LoginDto } from './dto/login.dto';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -28,7 +29,7 @@ export class AuthController {
 
   @UseGuards(AuthGuard('local'))
   @Post('login')
-  async login(@Request() req) {
+  async login(@Request() req, @Body() userData: LoginDto) {
     return this.authService.login(req.user);
   }
 }

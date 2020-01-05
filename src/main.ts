@@ -22,7 +22,6 @@ async function bootstrap(): Promise<void> {
   const options = new DocumentBuilder()
     .setTitle('TrueColors')
     .setVersion('1.0')
-    .setBasePath('api')
     .build();
   const document = SwaggerModule.createDocument(app, options);
   SwaggerModule.setup('/docs', app, document);
