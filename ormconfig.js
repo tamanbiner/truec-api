@@ -12,4 +12,7 @@ module.exports = {
   migrations: ['dist/src/migrations/**/*.js'],
   entities: ['dist/**/*.entity.js'],
   logging: true,
+  extra: {
+    ssl: true,
+  },
 };
