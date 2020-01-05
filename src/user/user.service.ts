@@ -12,8 +12,12 @@ export class UserService {
   ) {}
 
   public async getUserEntityById(uid: string): Promise<UserEntity> {
-    const user = await this.userRepository.findOne(uid);
-    return user;
+    return this.userRepository.findOne(uid);
+  }
+
+  public async getUserByEmail(email: string): Promise<UserEntity> {
+    email = email.toLowerCase();
+    return this.userRepository.findOne({ where: { email } });
   }
 
   public async createUser(

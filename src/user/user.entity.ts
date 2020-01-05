@@ -13,7 +13,7 @@ export class UserEntity implements IUser {
   email: string;
 
   @Column({ nullable: false, default: 'NULL' })
-  passwordHash: string;
+  passwordHash?: string;
 
   @Column({ nullable: false })
   fullName: string;
