@@ -1,9 +1,8 @@
-import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
+import { Injectable, Logger, ConflictException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, getRepository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { UserEntity } from './user.entity';
 import { CreateUserDto } from './dto/createUser.dto';
-import { UserRO } from './user.interface';
 
 @Injectable()
 export class UserService {
@@ -12,37 +11,26 @@ export class UserService {
     private readonly userRepository: Repository<UserEntity>
   ) {}
 
-  async create(dto: CreateUserDto): Promise<UserRO> {
-    const { fullName, email, password } = dto;
-    const qb = getRepository(UserEntity)
-      .createQueryBuilder('user')
-      .where('user.email = :email', { email });
-    const userExists = await qb.getOne();
-
-    if (userExists) {
-      const errors = { email: 'Email has already been taken!' };
-      throw new HttpException(
-        { message: 'Input data validation failed', errors },
-        HttpStatus.BAD_REQUEST
-      );
-    }
-
-    const newUser = new UserEntity();
-    newUser.email = email;
-    newUser.password = password;
-    newUser.fullName = fullName;
-
-    const savedUser = await this.userRepository.save(newUser);
-
-    return this.buildUserRO(savedUser);
+  public async getUserEntityById(uid: string): Promise<UserEntity> {
+    const user = await this.userRepository.findOne(uid);
+    return user;
   }
 
-  private buildUserRO(user: UserEntity) {
-    const userRO = {
-      email: user.email,
-      fullName: user.fullName,
-    };
+  public async createUser(
+    dto: CreateUserDto,
+    passwordHash: string
+  ): Promise<UserEntity> {
+    const newUser = new UserEntity();
+    newUser.email = dto.email.toLowerCase();
+    newUser.passwordHash = passwordHash;
+    newUser.fullName = dto.fullName;
 
-    return { user: userRO };
+    try {
+      await this.userRepository.insert(newUser);
+      return newUser;
+    } catch (err) {
+      Logger.error(JSON.stringify(err));
+      throw new ConflictException();
+    }
   }
 }

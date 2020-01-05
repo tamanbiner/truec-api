@@ -13,10 +13,9 @@ const HOST_PORT = 3007;
 async function bootstrap(): Promise<void> {
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
-    new FastifyAdapter()
+    new FastifyAdapter(),
+    { cors: true }
   );
-
-  app.enableCors();
 
   app.setGlobalPrefix('api');
 
